@@ -1,4 +1,6 @@
 <!doctype html>
+<!-- Importe le fichier buzz.js (permet de rendre le code plus lisible) -->
+<script type="text/javascript" src="buzz.js"></script>  
 <html lang="fr">
 <head>
   <meta charset="utf-8">
@@ -13,14 +15,8 @@
     <label for="name">Votre nom de joueur:</label>
     <input type="text" id='name' value="">
     <label for="buzz">Buzz if you have the answer !</label>
-    <input type="button" id='buzz' value="BUZZ !" onclick="msg()">
+    <input type="button" id='buzz' value="BUZZ !" onclick=msg()>
   </form>
-  
-  <script>
-  function msg() {
-    var playerName = document.getElementById("name").value;
-    alert("You just buzzed as: "+ playerName);
-  }
-  </script>
+
 </body>
 </html>
