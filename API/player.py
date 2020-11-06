@@ -1,14 +1,17 @@
-class player():
-    def __init__(self, name, id):
+class player(): 
+    def __init__(self, name):
         self.name = name
-        self.id = id
     def buzz(self):
         print(f'Player "{self.name}" Buzzed')
 
-playersList = []
+def addToPlayerLDict (player, playerDict):
+
+    pass
+playersDict = []
+
 
 if __name__ == "__main__":
-    timote = player('timote','000')
+    timote = player('timote')
     timote.buzz()
     
     pass
