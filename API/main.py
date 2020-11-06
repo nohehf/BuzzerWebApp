@@ -1,5 +1,7 @@
 #Run the server
 from flask import Flask, request
+from flask_defs import get_username
+
 app = Flask(__name__)
 
 @app.route('/hello_world', methods=['GET'])
@@ -8,16 +10,9 @@ def hello():
     return 'Hello, World!'
 
 @app.route('/user', methods=['POST','GET'])
-def get_username():
-    if request.method == 'POST':
-        print('POST')
-        username = request.form['username']
-        print(username)
-    if request.method == 'GET':
-        print('GET')
-        username = request.form['username']
-        print(username)
-    return username
+def user():
+    print('Getting username...')
+    return get_username()
 
 
 if __name__ == "__main__":
