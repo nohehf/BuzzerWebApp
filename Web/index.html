@@ -2,13 +2,25 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Titre de la page</title>
+  <title>BUZZER</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js"></script>
 </head>
 <body>
-  ...
-  <!-- Le reste du contenu -->
-  ...
+  <h1>BUZZER APP</h1>
+  
+  <form>
+    <label for="name">Votre nom de joueur:</label>
+    <input type="text" id='name' value="">
+    <label for="buzz">Buzz if you have the answer !</label>
+    <input type="button" id='buzz' value="BUZZ !" onclick="msg()">
+  </form>
+  
+  <script>
+  function msg() {
+    var playerName = document.getElementById("name").value;
+    alert("You just buzzed as: "+ playerName);
+  }
+  </script>
 </body>
 </html>
