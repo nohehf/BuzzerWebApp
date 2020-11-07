@@ -17,8 +17,8 @@ async def on_message(message): #La coroutine se lance lorsqu'un nouveau message 
         txt = open('url.txt', 'r')
         txt_id = txt.readline()
         if int(message.webhook_id) == int(txt_id): #Si le message vient du bot on peut faire les actions necessaires et on récupère l'username
-            mess = message.content.split()
-            name = mess[0]
+            mess = message.content
+            name = mess[:-9]
             answer = 'Bien reçu ! Je démute ' + str(name) + '!!!'
             await message.channel.send(answer)
         txt.close()
