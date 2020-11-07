@@ -13,7 +13,7 @@ function login(){
     currentPlayer.name = name;
 
 
-    const url = 'http://localhost:5000/login';
+    const url = 'http://192.168.1.167:5000/login';
     const options = {
         method: 'POST',
         body: JSON.stringify(currentPlayer)
@@ -27,7 +27,7 @@ function login(){
 
 function buzz(){
 
-    const url = 'http://localhost:5000/buzzer';
+    const url = 'http://192.168.1.167:5000/buzzer';
     const data = {
         'name': currentPlayer.name
     };
