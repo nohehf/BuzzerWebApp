@@ -1,5 +1,6 @@
 #Run the server
 from flask import Flask, request
+import flask
 from flask_defs import get_username
 
 app = Flask(__name__)
@@ -7,7 +8,10 @@ app = Flask(__name__)
 @app.route('/hello_world', methods=['GET'])
 def hello():
     print('Hello, World!')
-    return 'Hello, World!'
+    response = flask.make_response('Hello, World!',200)
+    response.mimetype = "text/plain"
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/user', methods=['POST','GET'])
 def user():
