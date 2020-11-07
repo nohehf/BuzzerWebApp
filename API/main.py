@@ -3,8 +3,14 @@ from flask import Flask, jsonify, request, abort, Response, make_response
 import json
 from flask_defs import get_username
 from player import Player
+import pathlib
 
 
+path = str(pathlib.Path(__file__).parent.parent.absolute()) + r'\yourLocalUrl.txt'
+print(path)
+urlFile = open(path,'r')
+myUrl = urlFile.read()
+urlFile.close()
 
 app = Flask(__name__)
 
@@ -35,5 +41,5 @@ def user():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True,host=myUrl)
     pass

@@ -1,3 +1,6 @@
+
+
+
 class Player {
     constructor(name) {
         this.name = name;
@@ -13,7 +16,7 @@ function login(){
     currentPlayer.name = name;
 
 
-    const url = 'http://localhost:5000/login';
+    const url = currentUrl()+':5000/login';
     const options = {
         method: 'POST',
         body: JSON.stringify(currentPlayer)
@@ -27,7 +30,7 @@ function login(){
 
 function buzz(){
 
-    const url = 'http://localhost:5000/buzzer';
+    const url = currentUrl() +':5000/buzzer'; //A changer quand sur serveur distant
     const data = {
         'name': currentPlayer.name
     };
@@ -95,10 +98,17 @@ function msg() {
 // }
 
 
-
+function currentUrl(){
+    var a = window.location.href;
+    return (a.substr(0,a.length-1));
+}
 
 function test() {
-    document.getElementById('buzzerDiv').style.display = 'block';
+    // var b = "/";
+     
+
+    alert(currentUrl());
+    
 }
 
 
