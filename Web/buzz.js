@@ -11,7 +11,6 @@ function buzz(){
     msg();
 }
 
-// Show name when buzz
 function login(){
     var name = document.getElementById('name').value
     var player = new Player(name)
@@ -26,7 +25,20 @@ function login(){
     fetch(url,options)
         .then(response => {console.log(response.status)})
     
-    // window.location.replace("/index.html");
+    switchPage();
+}
+
+function switchPage(){
+    var buzzerDiv = document.getElementById('buzzerDiv');
+    var loginDiv = document.getElementById('loginDiv');
+    if (buzzerDiv.style.display !== "block") {
+        buzzerDiv.style.display = "block";
+        loginDiv.style.display = "none";
+    }
+    else {
+        buzzerDiv.style.display = "none";
+        loginDiv.style.display = "block";
+    }
 }
 
 function msg() {
@@ -70,14 +82,7 @@ function sendName(){
 
 
 function test() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            document.getElementById("test").innerHTML = this.responseText;
-          }
-        };
-        xhttp.open("GET", "http://127.0.0.1:5000/hello_world", false);
-        xhttp.send();
+    document.getElementById('buzzerDiv').style.display = 'block';
 }
 
 
