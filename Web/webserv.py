@@ -1,14 +1,19 @@
 from flask import Flask, render_template
 import os
+import pathlib
 
-# template_dir = os.path.abspath('web')
-# print(template_dir)
 app = Flask(__name__)
+
+path = str(pathlib.Path(__file__).parent.parent.absolute()) + r'\yourLocalUrl.txt'
+print(path)
+urlFile = open(path,'r')
+myUrl = urlFile.read()
+urlFile.close()
 
 @app.route('/')
 def main():
     return render_template('index.html')
 
 if __name__ == "__main__":
-    app.run(debug=True,host='192.168.1.167', port=80)
+    app.run(debug=True,host=myUrl, port=80)
     pass
