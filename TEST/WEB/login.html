@@ -1,0 +1,14 @@
+<script>
+var player = {
+    'name': 'timote'
+}
+const url = 'http://localhost:5000/login'
+const options = {
+    method: 'POST',
+    body: JSON.stringify(player)
+};
+
+fetch(url,options)
+    .then(response => {console.log(response.status)})
+
+</script>
