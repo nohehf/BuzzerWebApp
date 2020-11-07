@@ -1,6 +1,6 @@
 <!doctype html>
 <!-- Importe le fichier buzz.js (permet de rendre le code plus lisible)  -->
-<script type="text/javascript" src="buzz.js"></script>
+<script type="text/javascript" src="script.js"></script>
 
 <!-- CACHE LA PARTIE BUZZER DE BASE A INCORPORER DANS LE CSS PLUS TARD -->
 <style>
@@ -30,11 +30,12 @@
 
   <!-- PARTIE AFFICHEE APRES LE LOGIN -->
   <div id='buzzerDiv'>
+
     <h1>BUZZER APP</h1>
     
     <form>
       <label for="buzz">Buzz if you have the answer !</label>
-      <input type="button" id='buzz' value="BUZZ !" onclick=buzz()>
+      <input type="button" id='buzzButton' value="BUZZ !" onclick=buzz()>
     </form>
 
   </div>
