@@ -28,16 +28,22 @@ function login(){
     switchPage();
 }
 
+//Fonction qui permet de changer de "mode" entre login et buzzer (fonctionne dans les 2 sens)
 function switchPage(){
     var buzzerDiv = document.getElementById('buzzerDiv');
     var loginDiv = document.getElementById('loginDiv');
     if (buzzerDiv.style.display !== "block") {
+        // PASSE EN MODE BUZZER
         buzzerDiv.style.display = "block";
         loginDiv.style.display = "none";
+        document.title = "BUZZER";
+        
     }
     else {
+        // PASSE EN MODE LOGIN
         buzzerDiv.style.display = "none";
         loginDiv.style.display = "block";
+        document.title = "LOGIN";
     }
 }
 
