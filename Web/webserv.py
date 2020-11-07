@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_from_directory
 import os
 import pathlib
+
 
 app = Flask(__name__)
 
@@ -13,6 +14,10 @@ urlFile.close()
 @app.route('/')
 def main():
     return render_template('index.html')
+
+@app.route('/favicon.ico')  #GESTION DE L'ICONE (POUR NE PLUS AVOIR L'ERREUR 404)
+def favicon(): 
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 if __name__ == "__main__":
     print('Go to '+myUrl+'on Any device on your network')
