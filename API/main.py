@@ -7,8 +7,7 @@ app = Flask(__name__)
 
 @app.route('/hello_world', methods=['GET'])
 def hello():
-    print('Hello, World!')
-    response = flask.make_response('Hello, World!',200)
+    response = flask.make_response('Get Response',200)
     response.mimetype = "text/plain"
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response

@@ -1,10 +1,8 @@
-
-// Called by clicking the buzz button
-function onClick(){
+function buzz(){
     msg();
 }
 
-// a simple test function
+// Show name when buzz
 function msg() {
     var playerName = document.getElementById("name").value;
     if (playerName == "") {
@@ -23,6 +21,11 @@ function httpGet (url) {
     // alert(xmlHttp.responseText) //A ENLEVER
     return xmlHttp.response;  
 }
+
+function sendName(){
+
+}
+
 
 
 function test() {
