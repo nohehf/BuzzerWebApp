@@ -2,6 +2,9 @@
 from flask import Flask, jsonify, request, abort, Response, make_response
 import json
 from flask_defs import get_username
+from player import Player
+
+
 
 app = Flask(__name__)
 
@@ -11,9 +14,11 @@ playerList = []
 def login():
     playerString = request.data.decode("utf-8")
     playerJson = json.loads(playerString)
-    print(playerJson['name'] + ' LOGGED IN')
+    player = Player(playerJson['name'])
+    print(player.name + ' LOGGED IN')
     response = make_response("POST SUCCES", 200)
     response.headers["Access-Control-Allow-Origin"] = "*"
+    playerList.append(player)
     return response
 
 @app.route('/buzzer', methods=['POST'])
