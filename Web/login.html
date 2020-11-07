@@ -1,0 +1,39 @@
+<!doctype html>
+<!-- Importe le fichier buzz.js (permet de rendre le code plus lisible) -->
+<script type="text/javascript" src="buzz.js"></script>  
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>LOGIN</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+</head>
+<body>
+  <h1>BUZZER APP LOGIN</h1>
+
+  <!-- <form>
+    <label for="name">Votre nom de joueur:</label>
+    <input type="text" id='name' value="">
+    <input type="button" id='sendName' value="Send Name" onclick=sendName()>
+
+  </form> -->
+
+  <form action = "http://localhost:5000/buzzer" method = "post">
+    <p>Enter Player Name:</p>
+    <p><input type = "user" name = "username" /></p>
+    <p><input type = "submit" value = "LOGIN" /></p>
+ </form>
+
+<footer>
+  <p>Web-app made by Nano et Nohz</p>
+  <p>Pas encore de copyright (MIT SOON)</p>
+</footer> 
+
+  <!-- //A enlever -->
+  <p>========================================================</p>
+  <p id="test">TEST ZONE A SUPPRIMER PLUS TARD</p>
+  <!-- Boutton de test à supprimer -->
+  <input type="button" id='testButton' value="TEST" onclick=test()> 
+  <!--  -->
+
+</html>
