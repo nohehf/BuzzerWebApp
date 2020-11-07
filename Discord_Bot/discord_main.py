@@ -5,42 +5,46 @@ intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents=intents)
 chara = '_'
-channel_setup = None
-
-
-@client.event
-async def buzzer_discord():
-    print(channel_setup)
-    await channel_setup.send('Buzzed')
-    return 'y'
 
 @client.event
 async def on_ready():
     print('We have logged in as {0.user}'.format(client))
-    print(client.guilds)
-    global all_guilds
-    all_guilds = client.guilds
-    print(all_guilds)
 @client.event
 async def on_message(message):
     if message.author == client.user:
         return
     try:
         if message.webhook_id == 774626469237358642:
-            await message.channel.send('Bonjour Rayou !')
+            mess = message.content.split()
+            name = mess[0]
+            answer = 'Bien reçu ! Je démute ' + str(name) + '!!!'
+            await message.channel.send(answer)
     except:
         pass
     if message.content.startswith(f'{chara}help') or client.user.mentioned_in(message):
         await message.channel.send('aide')
     if message.content.startswith(f'{chara}setup'):
-        global channel_setup
-        channel_setup = message.channel
-        check = 'Channel is set to ' + str(message.channel)
-        await message.channel.send(check)
-    if message.content.startswith(f'{chara}check'):
-        await message.channel.send(channel_setup)
-    if message.content.startswith(f'{chara}def'):
-        buzzer_discord()
+        channel = message.channel
+        k=0
+        webhook_list = await channel.webhooks()
+        print(webhook_list)
+        for webhook in webhook_list:
+            print(str(webhook))
+            if str(webhook) == 'WeBuzzerBot':
+                k=1
+        if k==0:
+            webhook_created = await channel.create_webhook(name='WeBuzzerBot')
+            id = webhook_created.id
+            token = webhook_created.token
+            webhook_url = 'discordapp.com/api/webhooks/' + str(id) + '/' + str(token)
+            txt = open('url.txt','w')
+            txt.write(webhook_url)
+            txt.close()
+            check = 'WebHook créé ! url= ' + webhook_url
+            await channel.send(check)
+        else:
+            await channel.send('Ce channel est déjà prêt.')
+
 
 
 if __name__ == "__main__":
