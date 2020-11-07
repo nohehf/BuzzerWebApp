@@ -12,10 +12,13 @@ def hello():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route('/buzzer', methods=['POST','GET'])
+@app.route('/buzzer', methods=['POST'])
 def user():
     print('Getting username...')
-    return get_username()
+    response = flask.make_response('POST Response',200)
+    response.mimetype = "text/plain"
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 if __name__ == "__main__":

@@ -1,12 +1,27 @@
+class Player {
+    constructor(name) {
+        this.name = name;
+    }
+}
+
+var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis fatigué
+
 function buzz(){
     msg();
 }
 
 // Show name when buzz
+function login(){
+    name = document.getElementById("name").value;
+    currentPlayer.name = name;
+    alert(currentPlayer.name)
+    httpPost("http://127.0.0.1:5000/buzzer",name);
+}
+
 function msg() {
-    var playerName = document.getElementById("name").value;
+    var playerName = "";//AJOUTER LE NOM DE L'objet currentPlayer
     if (playerName == "") {
-        alert("Veuillez entrer un nom !");
+        alert("Please LOGIN!");
     } else {
         alert("You just buzzed as: "+ playerName);
     }
@@ -14,12 +29,27 @@ function msg() {
 }
 
 
-function httpGet (url) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open( "GET", url, false); // false for synchronous request  ATTENTION CHANGER URL1
-    xmlHttp.send();
-    // alert(xmlHttp.responseText) //A ENLEVER
-    return xmlHttp.response;  
+function httpGet(url) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
+        }
+    };
+    xhttp.open("GET", url, false);
+    xhttp.send();
+}
+
+function httpPost(url,data) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.setRequestHeader('', data); // JE M'en suis arrété ici
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
+        }
+    };
+    xhttp.open("POST", url, false);
+    xhttp.send();
 }
 
 function sendName(){
