@@ -2,9 +2,18 @@
 from flask import Flask, jsonify, request, abort, Response, make_response
 import json
 from flask_defs import get_username
-from player import Player
 import pathlib
+import os
+import sys
 
+current_path = os.getcwd() #On setup le bon path pour être sur d'avoir les modules de bien importés, peut n'importe l'interpréteur.
+split = current_path.split('\\')
+if split[-1] != 'BuzzerWebApp':
+    split.pop()
+    BuzzerWebApp_folder_path = '\\'.join(split)
+    sys.path.append(BuzzerWebApp_folder_path)
+
+from player import Player
 
 path = str(pathlib.Path(__file__).parent.parent.absolute()) + r'\yourLocalUrl.txt'
 print(path)
