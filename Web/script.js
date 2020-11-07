@@ -4,28 +4,41 @@ class Player {
     }
 }
 
+
 var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis fatigué
 
 
-function buzz(){
-    msg();
-}
-
 function login(){
     var name = document.getElementById('name').value
-    var player = new Player(name)
+    currentPlayer.name = name;
 
 
-    const url = 'http://localhost:5000/login'
+    const url = 'http://localhost:5000/login';
     const options = {
         method: 'POST',
-        body: JSON.stringify(player)
+        body: JSON.stringify(currentPlayer)
     };
     
     fetch(url,options)
         .then(response => {console.log(response.status)})
     
     switchPage();
+}
+
+function buzz(){
+
+    const url = 'http://localhost:5000/buzzer';
+    const data = {
+        'name': currentPlayer.name
+    };
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(data)
+    };
+    
+    fetch(url,options)
+        .then(response => {console.log(response.status)})
+    console.log('BUZZ POST SEND');
 }
 
 //Fonction qui permet de changer de "mode" entre login et buzzer (fonctionne dans les 2 sens)
@@ -48,7 +61,7 @@ function switchPage(){
 }
 
 function msg() {
-    var playerName = "";//AJOUTER LE NOM DE L'objet currentPlayer
+    var playerName = "test";//AJOUTER LE NOM DE L'objet currentPlayer
     if (playerName == "") {
         alert("Please LOGIN!");
     } else {
@@ -58,32 +71,29 @@ function msg() {
 }
 
 
-function httpGet(url) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
-        }
-    };
-    xhttp.open("GET", url, false);
-    xhttp.send();
-}
+// function httpGet(url) {
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function() {
+//       if (this.readyState == 4 && this.status == 200) {
+//         document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
+//         }
+//     };
+//     xhttp.open("GET", url, false);
+//     xhttp.send();
+// }
 
-function httpPost(url,data) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.setRequestHeader('', data); // JE M'en suis arrété ici
-    xhttp.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
-        }
-    };
-    xhttp.open("POST", url, false);
-    xhttp.send();
-}
+// function httpPost(url,data) {
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.setRequestHeader('', data); // JE M'en suis arrété ici
+//     xhttp.onreadystatechange = function() {
+//       if (this.readyState == 4 && this.status == 200) {
+//         document.getElementById("test").innerHTML = this.responseText;  //A MODIFIER
+//         }
+//     };
+//     xhttp.open("POST", url, false);
+//     xhttp.send();
+// }
 
-function sendName(){
-
-}
 
 
 
