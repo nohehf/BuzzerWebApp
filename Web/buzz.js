@@ -6,16 +6,27 @@ class Player {
 
 var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis fatigué
 
+
 function buzz(){
     msg();
 }
 
 // Show name when buzz
 function login(){
-    name = document.getElementById("name").value;
-    currentPlayer.name = name;
-    alert(currentPlayer.name)
-    httpPost("http://127.0.0.1:5000/buzzer",name);
+    var name = document.getElementById('name').value
+    var player = new Player(name)
+
+
+    const url = 'http://localhost:5000/login'
+    const options = {
+        method: 'POST',
+        body: JSON.stringify(player)
+    };
+    
+    fetch(url,options)
+        .then(response => {console.log(response.status)})
+    
+    // window.location.replace("/index.html");
 }
 
 function msg() {
