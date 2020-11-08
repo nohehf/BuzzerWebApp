@@ -1,11 +1,16 @@
 const namespace = '/test'; //adresse de l'event
 var socket = io(namespace);
 
-$('#buttonLogin').click(function(){
+// $('#buttonLogin').click(function(){
+//     alert('Login?')
+//     var playerName = $('#name').val();
+//     socket.emit('login', {name: playerName});
+// });
+function login(){
     alert('Login?')
     var playerName = $('#name').val();
     socket.emit('login', {name: playerName});
-});
+};
 
 $('#buttonBuzz').click(function(){
     var playerName = $('#name').val();
