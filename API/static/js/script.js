@@ -10,8 +10,7 @@ var socket = io(namespace);
 var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis fatigué
 
 
-$('#loginButton').click(function(){
-    alert('Login?') // A ENLEVER
+$('#loginButton').on('click',function(){
     var name = $('#name').val();
     currentPlayer.name = name;
     socket.emit('login', {name: name});
@@ -35,8 +34,7 @@ $('#loginButton').click(function(){
 //     switchPage();
 // }
 
-$('#buzzButton').click(function(){
-    alert('BUZZ!') //A ENLEVER
+$('#buzzButton').click(function(){  
     socket.emit('buzz', {name: currentPlayer.name})
 });
 

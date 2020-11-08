@@ -24,7 +24,7 @@ if __name__ == "__main__":
     playerJson = {
         "name": "nohz"
     }
-    timote = Player('timote')
+    timote = Player('timote','0')
     timote.buzz()
     
     pass

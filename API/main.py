@@ -38,15 +38,15 @@ playerList = {} #Associe discord name et Sid
 def index():
     return render_template('index.html',sync_mode=socket_.async_mode)
 
-@socket_.on('login', namespace='/test')
+@socket_.on('login', namespace='/test') #CHANGE NAMESPACE
 def connect_message(message):
     print(message)
     # session['receive_count'] = session.get('receive_count', 0) + 1
     playerName = message['name']
     playerSid = request.sid
-    emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
     player = Player(playerName,playerSid) #On crée un nouveau joueur /!\ il va falloir vérifier l'unicité du nom et si il exite déja juste changer le sid
     playerList[message['name']] = player #On l'ajoute à la liste de joueurs.
+    emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
     print(playerList)
 
 # @app.route('/login', methods=['POST'])
@@ -60,16 +60,24 @@ def connect_message(message):
 #     playerList[player.name] = player #On ajoute le joueur à la playerList, pour le moment on identifie par name, il faudra plus tard associer un id
 #     return response
 
-@app.route('/buzzer', methods=['POST'])
-def user():
-    dataString = request.data.decode("utf-8")
-    dataJson = json.loads(dataString)
-    name = dataJson['name'] #On récupere le nom du joueur qui à buzzé
-    player = playerList[name] #on cherche le player correspondant dans playerList
-    player.buzz() #on appelle la méthode buzz pour le joueur qui à buzzé
-    response = make_response("POST SUCCES", 200)
-    response.headers["Access-Control-Allow-Origin"] = "*"
-    return response
+@socket_.on('buzz',namespace='/test') 
+def buzz(message):
+    playerThatBuzzed = playerList[message['name']] #On récupere l'objet player associé au nom du joueur qui a buzzé
+    print('BUZZ!!')
+    emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True)
+    playerThatBuzzed.buzz()
+
+
+# @app.route('/buzzer', methods=['POST'])
+# def user():
+#     dataString = request.data.decode("utf-8")
+#     dataJson = json.loads(dataString)
+#     name = dataJson['name'] #On récupere le nom du joueur qui à buzzé
+#     player = playerList[name] #on cherche le player correspondant dans playerList
+#     player.buzz() #on appelle la méthode buzz pour le joueur qui à buzzé
+#     response = make_response("POST SUCCES", 200)
+#     response.headers["Access-Control-Allow-Origin"] = "*"
+#     return response
 
 
 
