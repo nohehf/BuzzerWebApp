@@ -1,5 +1,8 @@
 import sys #on setup les différents paths (c un peu le bordel)
-from lib.WebHook import buzz_webhook_send
+try:
+    from lib.WebHook import buzz_webhook_send
+except:
+    from WebHook import buzz_webhook_send
 
 class Player():
     def __init__(self, name, sid):
