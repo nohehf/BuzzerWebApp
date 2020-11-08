@@ -1,12 +1,14 @@
 import discord
 import asyncio
 import time
-#initialisation du bot
+# Initialisation du bot
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents=intents)
 
-chara = '_' # le charactère pour les commandes
+# Paramétrage du bot
+bot_token = 'Nzc0NDE1MjE3NjQ3OTQzNjgy.X6XcXw.UIe9ZesQhp4RGU1yB_xUtTI2oi0' # Le token du bot mis à la zeub (pas très secure :) )
+chara = '_' # Le charactère pour les commandes
 
 @client.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
 async def on_ready(): # La coroutine se lance lorsque le bot est bien opérationnel.
@@ -52,8 +54,15 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
     except: # Sinon on passe aux conditions suivantes
         txt.close()
         pass
-    if message.content.startswith(f'{chara}help') or client.user.mentioned_in(message): # Pour afficher la page d'aide quand elle sera faite...
-        await message.channel.send('aide')
+    if message.content.startswith(f'{chara}help') or client.user.mentioned_in(message): # Pour afficher la page d'aide sous forme d'embed
+        embed = discord.Embed(title="BuzzerWebApp Help Sheet", description="List of all the availables commands :")
+        embed.add_field(name=f"{chara}setup ",
+                        value="Start the setup phase. You have to send it in the TextChannel where the game will take place. You will be able to choose the VoiceChannel afterwards.",
+                        inline=False)
+        embed.add_field(name=f"{chara}clear",
+                        value="Clear the WebHook created by the bot in this TextChannel. Use only if the WebHook is not responding.",
+                        inline=True)
+        await message.channel.send(embed=embed)
     if message.content.startswith(f'{chara}setup'): # Le setup permet de créer le webhook dans le bon channel (chaque webhook est lié à un channel seulement)
         channel = message.channel
         k=0
@@ -130,5 +139,5 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
 
 
 if __name__ == "__main__":
-    client.run('Nzc0NDE1MjE3NjQ3OTQzNjgy.X6XcXw.UIe9ZesQhp4RGU1yB_xUtTI2oi0') # On run le bot avec son token secret mis à la zeub :)
+    client.run(bot_token) # On run le bot avec son token secret!
     pass
