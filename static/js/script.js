@@ -41,21 +41,22 @@ socket.on('loginResponse', function(msg,cb){
 })
 
 socket.on('buzzResponse', function(msg,cb){
-    var playerName = $('#name').val(); //Il faudra récuperer current Player.name
-    countdown();
+    var playerName = currentPlayer.name; 
     if (msg.data == playerName){
         $('#log').append( "YOU BUZZED! <br>");
-        $('#whoBuzzed').val("YOU BUZZED!");
+        $('#whoBuzzed').text("YOU BUZZED!");
     } else{
         $('#log').append('Player: ' + msg.data + " BUZZED! <br>");
-        $('#whoBuzzed').val('Player: ' + msg.data + " BUZZED!");
+        $('#whoBuzzed').text('Player: ' + msg.data + " BUZZED!");
     }
+    countdown();
+    // countdown();
 })
 
 
-function countdown(seconds){
+function countdown(){
     switchPage();
-    $("#countdownTimer").TimeCircles().start();
+    $("#countDownTimer").TimeCircles().restart();
     
 }
 
@@ -63,17 +64,22 @@ function countdown(seconds){
 function switchPage(){
     var buzzerDiv = document.getElementById('buzzerDiv');
     var loginDiv = document.getElementById('loginDiv');
+    var countDownTimer = document.getElementById('countDownTimer');
+    var whoBuzzed = document.getElementById('whoBuzzed');
     if (buzzerDiv.style.display !== "block") {
         // PASSE EN MODE BUZZER
         buzzerDiv.style.display = "block";
         loginDiv.style.display = "none";
+        countDownTimer.style.display = "none";
+        whoBuzzed.style.display = 'none';
         document.title = "BUZZER";
         
     }
     else {
         // PASSE EN MODE COUNTDOWN
         buzzerDiv.style.display = "none";
-        countdownDiv.style.display = "block";
+        countDownTimer.style.display = "block";
+        whoBuzzed.style.display = 'block';
         document.title = "COUNTDOWN";
     }
 }

@@ -1,5 +1,10 @@
 <!DOCTYPE HTML>
 <html>
+    <style>
+        #CountDownTimer{
+            display: none
+        }
+    </style>
     <head>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
@@ -7,12 +12,12 @@
         <link rel="stylesheet" href="inc/TimeCircles.css" />
     </head>
     <body>
-        <div id="countDown">
+        <div id="countDown" >
         <h1 style="text-align: center;">Player buzzed!</h1>
-        <div id="CountDownTimer" data-timer="30" style="width: 40%; height: 40%; margin: auto;"></div>
+        <div id="CountDownTimer" data-timer="30" style="width: 40%; margin-left:30%;"></div>
         <script>
-            $("#countdownTimer").TimeCircles({start: false}); 
-            $("#CountDownTimer").TimeCircles({ time: { Days: { show: false }, Hours: { show: false },Minutes: { show: false } }});
+            // $("#CountDownTimer").TimeCircles({start: false});
+            $("#CountDownTimer").TimeCircles({ time: { Days: { show: false }, Hours: { show: false },Minutes: { show: false } },start: false});
             $("#CountDownTimer").TimeCircles({count_past_zero: false}); 
             $("#CountDownTimer").TimeCircles().addListener(countdownComplete);
             function countdownComplete(unit, value, total){
