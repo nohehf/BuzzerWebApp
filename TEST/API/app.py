@@ -25,7 +25,7 @@ def index():
 def connect_message(message):
     print(message)
     # session['receive_count'] = session.get('receive_count', 0) + 1
-    emit('response', {'data': "Logged as : " + message['name'] + "<br> Your Sid=" + request.sid})
+    emit('loginResponse', {'data': "Logged as : " + message['name'] + "<br> Your Sid=" + request.sid})
     playerList[message['name']] = request.sid
     print(playerList)
 
@@ -34,7 +34,7 @@ def buzz(message):
     responseMessage = 'Player: ' + message['name'] + ' Buzzed'
     print('BUZZ!!')
     print(responseMessage)
-    emit('response', {'data': message['name']}, broadcast=True)
+    emit('buzzResponse', {'data': message['name']}, broadcast=True)
     
 
 
