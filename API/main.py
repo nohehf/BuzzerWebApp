@@ -1,6 +1,7 @@
 #Run the server
-from flask import Flask, jsonify, request, abort, Response, make_response
-import json
+from flask import Flask, jsonify, abort, Response, make_response, render_template, session, copy_current_request_context , request
+from flask_socketio import SocketIO, emit, disconnect
+from threading import Lock
 from flask_defs import get_username
 import pathlib
 import os
@@ -15,26 +16,49 @@ if split[-1] != 'BuzzerWebApp':
 
 from player import Player
 
-path = str(pathlib.Path(__file__).parent.parent.absolute()) + r'\yourLocalUrl.txt'
-print(path)
-urlFile = open(path,'r')
-myUrl = urlFile.read()
-urlFile.close()
+#SETUP DE L'URL LOCALE A REACTIVER
+# path = str(pathlib.Path(__file__).parent.parent.absolute()) + r'\yourLocalUrl.txt'
+# print(path)
+# urlFile = open(path,'r')
+# myUrl = urlFile.read()
+# urlFile.close()
 
+#On setup flask et SocketIO
+async_mode = None
 app = Flask(__name__)
+# app.config['SECRET_KEY'] = 'secret!'
+socket_ = SocketIO(app, async_mode=async_mode)
+#A tester différemment:
+thread = None
+thread_lock = Lock()
 
-playerList = {}
+playerList = {} #Associe discord name et Sid
 
-@app.route('/login', methods=['POST'])
-def login():
-    playerString = request.data.decode("utf-8") #On récupere la data de la requete sous forme de string
-    playerJson = json.loads(playerString) #on la transforme en json
-    player = Player(playerJson['name']) #on crée un nouveau joueur
-    print(player.name + ' LOGGED IN') 
-    response = make_response("POST SUCCES", 200)
-    response.headers["Access-Control-Allow-Origin"] = "*" 
-    playerList[player.name] = player #On ajoute le joueur à la playerList, pour le moment on identifie par name, il faudra plus tard associer un id
-    return response
+@app.route('/')  #Desormais l'index est host sur le meme serveur
+def index():
+    return render_template('index.html',sync_mode=socket_.async_mode)
+
+@socket_.on('login', namespace='/test')
+def connect_message(message):
+    print(message)
+    # session['receive_count'] = session.get('receive_count', 0) + 1
+    playerName = message['name']
+    playerSid = request.sid
+    emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
+    player = Player(playerName,playerSid) #On crée un nouveau joueur /!\ il va falloir vérifier l'unicité du nom et si il exite déja juste changer le sid
+    playerList[message['name']] = player #On l'ajoute à la liste de joueurs.
+    print(playerList)
+
+# @app.route('/login', methods=['POST'])
+# def login():
+#     playerString = request.data.decode("utf-8") #On récupere la data de la requete sous forme de string
+#     playerJson = json.loads(playerString) #on la transforme en json
+#     player = Player(playerJson['name']) #on crée un nouveau joueur
+#     print(player.name + ' LOGGED IN') 
+#     response = make_response("POST SUCCES", 200)
+#     response.headers["Access-Control-Allow-Origin"] = "*" 
+#     playerList[player.name] = player #On ajoute le joueur à la playerList, pour le moment on identifie par name, il faudra plus tard associer un id
+#     return response
 
 @app.route('/buzzer', methods=['POST'])
 def user():
@@ -50,5 +74,6 @@ def user():
 
 
 if __name__ == "__main__":
-    app.run(debug=True,host=myUrl)
+    # app.run(debug=True,host=myUrl)
+    socket_.run(app,debug=True,host="192.168.1.167") #AJOUTER LE SUPPORT DU TXT
     pass

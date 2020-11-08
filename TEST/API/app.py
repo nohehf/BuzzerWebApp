@@ -10,7 +10,7 @@ import json
 
 async_mode = None
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+# app.config['SECRET_KEY'] = 'secret!'
 socket_ = SocketIO(app, async_mode=async_mode)
 thread = None
 thread_lock = Lock()
