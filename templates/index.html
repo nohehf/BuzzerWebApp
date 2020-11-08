@@ -6,13 +6,27 @@
   #buzzerDiv{
     display: none
   }
+  #countDownTimer{
+    display: none
+  }
 </style>
 
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <title id='pageTitle'>LOGIN</title>
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+  <!-- Importe l'icone -->
+  <link rel="icon" href="/static/favicon.ico" />
+  <!-- Importe JQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <!-- Importe Socket-IO -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <!-- Importe le fichier buzz.js (permet de rendre le code plus lisible)  -->
+  <script type="text/javascript" src="/static/js/script.js"></script>
+  <!-- Importe timecircles -->
+  <!-- <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"> -->
+  <script type="text/javascript" src="static/js/TimeCircles.js"></script>
+  <link rel="stylesheet" href="static/css/TimeCircles.css" />
 </head>
 <body>
 
@@ -35,13 +49,33 @@
     <h1>BUZZER APP</h1>
     
     <form>
-      <label for="buzz">Buzz if you have the answer !</label>
-      <input type="button" id='buzzButton' value="BUZZ !" onclick=buzz()>
+      <label for="buzz">Buzz if you have the answer ! <br></label>
+      <input type="button" id='buzzButton' onclick=buzz() style="padding: 100px 100px; border-radius: 30%;background-color: #b61616;">
       <!-- <input type="button" id='buzzButton' value="BUZZ !"> -->
     </form>
 
   </div>
 
+  <!-- PARTIE AFFICHEE LORS DU TIMER -->
+
+  <div id="countDownDiv">
+    <div id='whoBuzzed' style="text-align: center; font-size: xx-large;"></div>
+    <div id="countDownTimer" data-timer="30" style="width:100%; height: 100%; margin-left: 30%;"></div>
+    <script>
+        // $("#countDownTimer").TimeCircles({start: false}); 
+        $("#countDownTimer").TimeCircles({time: { Days: { show: false }, Hours: { show: false },Minutes: { show: false } },start: false});
+        $("#countDownTimer").TimeCircles({count_past_zero: false}); 
+        $("#countDownTimer").TimeCircles().addListener(countdownComplete);
+        function countdownComplete(unit, value, total){
+          if(total<=0){
+                // $(this).fadeOut('slow').replaceWith("<h2>Time's Up!</h2>");
+                switchPage();
+                // $("#countDownTimer").TimeCircles().restart()
+          }
+        }          
+
+    </script> 
+    </div>      
 
 <br>
 <h2 style="background-color:white;">Logs</h2>
@@ -62,11 +96,6 @@
   <input type="button" id='testButton' value="TEST" onclick=test()> 
   <!--  -->
 
-<!-- Importe JQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<!-- Importe Socket-IO -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<!-- Importe le fichier buzz.js (permet de rendre le code plus lisible)  -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 
 </html>
