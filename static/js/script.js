@@ -13,7 +13,6 @@ var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis
 
 
 function login(){  //NE MARCHE QUE SUR SAFARI
-    alert('Login?')
     var name = $('#name').val();
     currentPlayer.name = name;
     socket.emit('login', {name: name});
@@ -43,14 +42,22 @@ socket.on('loginResponse', function(msg,cb){
 
 socket.on('buzzResponse', function(msg,cb){
     var playerName = $('#name').val(); //Il faudra récuperer current Player.name
+    countdown();
     if (msg.data == playerName){
         $('#log').append( "YOU BUZZED! <br>");
+        $('#whoBuzzed').val("YOU BUZZED!");
     } else{
         $('#log').append('Player: ' + msg.data + " BUZZED! <br>");
+        $('#whoBuzzed').val('Player: ' + msg.data + " BUZZED!");
     }
-    
 })
 
+
+function countdown(seconds){
+    switchPage();
+    $("#countdownTimer").TimeCircles().start();
+    
+}
 
 //Fonction qui permet de changer de "mode" entre login et buzzer (fonctionne dans les 2 sens)
 function switchPage(){
@@ -64,10 +71,10 @@ function switchPage(){
         
     }
     else {
-        // PASSE EN MODE LOGIN
+        // PASSE EN MODE COUNTDOWN
         buzzerDiv.style.display = "none";
-        loginDiv.style.display = "block";
-        document.title = "LOGIN";
+        countdownDiv.style.display = "block";
+        document.title = "COUNTDOWN";
     }
 }
 

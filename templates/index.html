@@ -6,13 +6,27 @@
   #buzzerDiv{
     display: none
   }
+  #countdownDiv{
+    display: none
+  }
 </style>
 
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <title id='pageTitle'>LOGIN</title>
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+  <!-- Importe l'icone -->
+  <link rel="icon" href="/static/favicon.ico" />
+  <!-- Importe JQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <!-- Importe Socket-IO -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <!-- Importe le fichier buzz.js (permet de rendre le code plus lisible)  -->
+  <script type="text/javascript" src="/static/js/script.js"></script>
+  <!-- Importe timecircles -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+  <script type="text/javascript" src="static/js/TimeCircles.js"></script>
+  <link rel="stylesheet" href="static/css/TimeCircles.css" />
 </head>
 <body>
 
@@ -42,6 +56,25 @@
 
   </div>
 
+  <!-- PARTIE AFFICHEE LORS DU TIMER -->
+  <div id="countdownDiv">
+    <h1 id='howBuzzed' style="text-align: center;">Player buzzed!</h1>
+    <div id="CountDownTimer" data-timer="30" style="width: 40%; height: 40%; margin: auto;"></div>
+    <!-- Script a intégrer dans script.js -->
+    <script>
+        $(".example").TimeCircles({start: false}); 
+        $("#CountDownTimer").TimeCircles({ time: { Days: { show: false }, Hours: { show: false },Minutes: { show: false } }});
+        $("#CountDownTimer").TimeCircles({count_past_zero: false}); 
+        $("#CountDownTimer").TimeCircles().addListener(countdownComplete);
+        function countdownComplete(unit, value, total){
+          if(total<=0){
+                // $(this).fadeOut('slow').replaceWith("<h2>Time's Up!</h2>");
+                alert('FIN DU TIMER!')
+          }
+        }          
+
+    </script> 
+    </div>      
 
 <br>
 <h2 style="background-color:white;">Logs</h2>
@@ -62,11 +95,6 @@
   <input type="button" id='testButton' value="TEST" onclick=test()> 
   <!--  -->
 
-<!-- Importe JQuery -->
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<!-- Importe Socket-IO -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<!-- Importe le fichier buzz.js (permet de rendre le code plus lisible)  -->
-<script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
+
 
 </html>

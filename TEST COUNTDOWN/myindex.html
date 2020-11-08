@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+        <script type="text/javascript" src="inc/TimeCircles.js"></script>
+        <link rel="stylesheet" href="inc/TimeCircles.css" />
+    </head>
+    <body>
+        <div id="countDown">
+        <h1 style="text-align: center;">Player buzzed!</h1>
+        <div id="CountDownTimer" data-timer="30" style="width: 40%; height: 40%; margin: auto;"></div>
+        <script>
+            $("#countdownTimer").TimeCircles({start: false}); 
+            $("#CountDownTimer").TimeCircles({ time: { Days: { show: false }, Hours: { show: false },Minutes: { show: false } }});
+            $("#CountDownTimer").TimeCircles({count_past_zero: false}); 
+            $("#CountDownTimer").TimeCircles().addListener(countdownComplete);
+            function countdownComplete(unit, value, total){
+	            if(total<=0){
+                    // $(this).fadeOut('slow').replaceWith("<h2>Time's Up!</h2>");
+                    alert('FIN DU TIMER!')
+	            }
+            }          
+
+        
+            // Fade in and fade out are examples of how chaining can be done with TimeCircles
+            // $(".fadeIn").click(function() {
+            //     $("#PageOpenTimer").fadeIn();
+            // });
+            // $(".fadeOut").click(function() {
+            //     $("#PageOpenTimer").fadeOut();
+            // });
+
+        </script> 
+        </div>      
+    </body>
+</html>
