@@ -20,7 +20,7 @@ try:
     myUrl = urlFile.read()
     urlFile.close()
 except:
-    myUrl = '127.0.0.1'
+    myUrl = '176.167.250.142'
 
 #On setup flask et SocketIO
 async_mode = None
