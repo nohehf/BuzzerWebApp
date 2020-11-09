@@ -15,10 +15,12 @@ import lib.player
 #     sys.path.append(BuzzerWebApp_folder_path)
 
 
-
-urlFile = open('yourLocalUrl.txt','r')
-myUrl = urlFile.read()
-urlFile.close()
+try:
+    urlFile = open('yourLocalUrl.txt','r')
+    myUrl = urlFile.read()
+    urlFile.close()
+except:
+    myUrl = '127.0.0.1'
 
 #On setup flask et SocketIO
 async_mode = None
