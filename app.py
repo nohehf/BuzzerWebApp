@@ -10,18 +10,19 @@ config = ConfigParser()
 config.read("config.ini")
 
 
-#SERVER CONFIG
-host = config["SERVER"]['host']
-port = int(config["SERVER"]['port'])
+# #SERVER CONFIG
+# host = config["SERVER"]['host']
+# port = int(config["SERVER"]['port'])
 
 #On setup flask et SocketIO
-async_mode = None
+# async_mode = None
 app = Flask(__name__)
 # app.config['SECRET_KEY'] = 'secret!'
-socket_ = SocketIO(app, async_mode=async_mode)
+socket_ = SocketIO(app)
+# socket_ = SocketIO(app, async_mode=async_mode)
 #A tester différemment:
-thread = None
-thread_lock = Lock()
+# thread = None
+# thread_lock = Lock()
 
 playerList = {} #Associe discord name et Sid
 
@@ -29,7 +30,7 @@ playerList = {} #Associe discord name et Sid
 def index():
     return render_template('index.html',sync_mode=socket_.async_mode)
 
-@socket_.on('login', namespace='/test') #CHANGE NAMESPACE
+@socket_.on('login') #CHANGE NAMESPACE to /test
 def connect_message(message):
     print(message)
     playerName = message['name']
@@ -41,7 +42,7 @@ def connect_message(message):
 
 
 
-@socket_.on('buzz',namespace='/test') 
+@socket_.on('buzz') 
 def buzz(message):
     playerThatBuzzed = playerList[message['name']] #On récupere l'objet player associé au nom du joueur qui a buzzé
     print('BUZZ!!')
@@ -52,8 +53,8 @@ def buzz(message):
 
 
 if __name__ == "__main__":
-    socket_.run(app,debug=True,host=host,port=port)
-    pass
+    socket_.run(app,debug=True,host='0.0.0.0',port=5004)
+
 
 #======================      OLD       =================================
 # @app.route('/login', methods=['POST'])
