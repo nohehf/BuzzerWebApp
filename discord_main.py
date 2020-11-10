@@ -38,7 +38,7 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                 if member_buzzer == None:
                     member_buzzer = discord.utils.get(guild.members,id=name)  # On essaie d'avoir le membre correspondant à l'id fourni
             VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
-            whitelist = list(config["DISCORD"]['whitelist'])
+            whitelist = config["DISCORD"]['whitelist'].split(',')
             try:
                 whitelist.append(str(member_buzzer)) #... à laquelle on ajoute temporairement le membre qui a buzzé.
             except:

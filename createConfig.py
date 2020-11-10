@@ -24,7 +24,7 @@ config_object["DISCORD"] = {
     "VoiceChannel": "Bureau",
     "token":"Nzc0NDE1MjE3NjQ3OTQzNjgy.X6XcXw.UIe9ZesQhp4RGU1yB_xUtTI2oi0",
     "chara":"_",
-    "whitelist":["279671822180417537"],
+    "whitelist":'Nano#5738,Nohz#9888',
 }
 
 #Write the above sections to config.ini file
