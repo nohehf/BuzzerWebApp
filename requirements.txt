@@ -33,7 +33,6 @@ yarl==1.5.1
 zope.event==4.5.0
 zope.interface==5.2.0
 eventlet
-Flask==1.1.1
 gunicorn
 Flask-SocketIO
 eventlet
