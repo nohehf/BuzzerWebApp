@@ -32,19 +32,19 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
             name = mess[:-9]
             guild = message.guild
             VoiceChannel_name = config['DISCORD']['voicechannel'] # On lit le salon vocal du setup
-            try:
-                member_buzzer = discord.utils.get(guild.members, id=int(name)) # On essaie d'avoir le membre correspondant à l'id fournit
-            except:
-                member_buzzer = None
+            member_buzzer = discord.utils.get(guild.members,display_name=name)  # On essaie d'avoir le membre correspondant à au surnom (ou nom) fourni
+            if member_buzzer == None:
+                member_buzzer = discord.utils.get(guild.members,name=name)  # On essaie d'avoir le membre correspondant au nom fourni
+                if member_buzzer == None:
+                    member_buzzer = discord.utils.get(guild.members,id=name)  # On essaie d'avoir le membre correspondant à l'id fourni
             VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
             whitelist = config["DISCORD"]['whitelist']
             try:
                 whitelist.append(member_buzzer.id) #... à laquelle on ajoute temporairement le membre qui a buzzé.
             except:
                 pass
-            whitelist = map(int, whitelist) # On map les id en int
             for member in VoiceChan.members: # Pour chaque membre du salon vocal, on regarde si il est dans la whitelist
-                if member.id in whitelist:
+                if str(member) in whitelist:
                     await member.edit(mute=False) # Oui, on le démute
                 else:
                     await member.edit(mute=True) # Non, on le mute
