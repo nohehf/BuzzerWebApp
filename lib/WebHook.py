@@ -1,7 +1,4 @@
-import requests
 import discord
-import os
-import sys
 from discord import Webhook, RequestsWebhookAdapter, File
 
 def get_webhook_info(config): #On récupère les info pour utiliser le webhook
