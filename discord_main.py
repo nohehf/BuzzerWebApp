@@ -1,21 +1,25 @@
 import discord
 import asyncio
 import time
-# Initialisation du bot
-intents = discord.Intents.default()
-intents.members = True
-client = discord.Client(intents=intents)
+from discord.ext import commands
 
-# Paramétrage du bot
 bot_token = 'Nzc0NDE1MjE3NjQ3OTQzNjgy.X6XcXw.UIe9ZesQhp4RGU1yB_xUtTI2oi0' # Le token du bot mis à la zeub (pas très secure :) )
 chara = '_' # Le charactère pour les commandes
 
-@client.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
+# Initialisation du bot
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix=chara,intents=intents)
+# Paramétrage du bot
+
+
+
+@bot.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
 async def on_ready(): # La coroutine se lance lorsque le bot est bien opérationnel.
-    print('We have logged in as {0.user}'.format(client))
-@client.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
+    print('We have logged in as {0.user}'.format(bot))
+@bot.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
 async def on_message(message): # La coroutine se lance lorsqu'un nouveau message est envoyé
-    if message.author == client.user: # On ne veut pas que le bot réponde à ses propres messages
+    if message.author == bot.user: # On ne veut pas que le bot réponde à ses propres messages
         return
     try: # On regarde si le message a été envoyé par le webhook
         txt = open('url.txt', 'r')
@@ -29,21 +33,21 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
             setup_txt = open('setup.txt','r')
             VoiceChannel_name = setup_txt.readline() # On lit le salon vocal du setup
             setup_txt.close()
-            try:
-                member_buzzer = discord.utils.get(guild.members, id=int(name)) # On essaie d'avoir le membre correspondant à l'id fournit
-            except:
-                member_buzzer = None
+            member_buzzer = discord.utils.get(guild.members, display_name=name) # On essaie d'avoir le membre correspondant à au surnom (ou nom) fourni
+            if member_buzzer == None:
+                member_buzzer = discord.utils.get(guild.members, name=name) # On essaie d'avoir le membre correspondant au nom fourni
+                if member_buzzer == None:
+                    member_buzzer = discord.utils.get(guild.members, id=name) # On essaie d'avoir le membre correspondant à l'id fourni
             VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
             whitelist_file = open('whitelist.txt','r')
             whitelist = whitelist_file.readlines() # On lit la whitelist...
             whitelist_file.close()
             try:
-                whitelist.append(member_buzzer.id) #... à laquelle on ajoute temporairement le membre qui a buzzé.
+                whitelist.append(str(member_buzzer)) #... à laquelle on ajoute temporairement le membre qui a buzzé.
             except:
                 pass
-            whitelist = map(int, whitelist) # On map les id en int
             for member in VoiceChan.members: # Pour chaque membre du salon vocal, on regarde si il est dans la whitelist
-                if member.id in whitelist:
+                if str(member) in whitelist:
                     await member.edit(mute=False) # Oui, on le démute
                 else:
                     await member.edit(mute=True) # Non, on le mute
@@ -54,7 +58,7 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
     except: # Sinon on passe aux conditions suivantes
         txt.close()
         pass
-    if message.content.startswith(f'{chara}help') or client.user.mentioned_in(message): # Pour afficher la page d'aide sous forme d'embed
+    if message.content.startswith(f'{chara}help') or bot.user.mentioned_in(message): # Pour afficher la page d'aide sous forme d'embed
         embed = discord.Embed(title="BuzzerWebApp Help Sheet", description="List of all the availables commands :")
         embed.add_field(name=f"{chara}setup ",
                         value="Start the setup phase. You have to send it in the TextChannel where the game will take place. You will be able to choose the VoiceChannel afterwards.",
@@ -91,7 +95,7 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
             await channel.send('WebHook déja configuré.') # Le webhook est déja créé, on ne fait rien.
         await channel.send("Veuillez rentrer le nom du channel vocal où se passe l'évènement :")
         try:
-            reponse = await client.wait_for("message", timeout=30) # On attend la réponse d'un membre : on arrête après 30 secondes
+            reponse = await bot.wait_for("message", timeout=30) # On attend la réponse d'un membre : on arrête après 30 secondes
             try:
                 reponse = reponse.content
                 guild = message.guild
@@ -107,7 +111,7 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                 await asyncio.sleep(1) # On tempo une seconde pour que le bot ne prenne pas en compte ses propres reactions
                 try:
                     try:
-                        react = await client.wait_for("reaction_add", timeout=30) # On attend la reaction d'un membre
+                        react = await bot.wait_for("reaction_add", timeout=30) # On attend la reaction d'un membre
                         react = str(react)
                         emoji = react[18]
                         print(emoji)
@@ -131,13 +135,20 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
         webhook_list = await channel.webhooks()
         nbr = 0
         for webhook in webhook_list:
-            if str(webhook.user) == str(client.user):
+            if str(webhook.user) == str(bot.user):
                 await webhook.delete()
                 nbr+=1
         check = str(nbr) + ' Webhook(s) supprimé(s)'
         await channel.send(check)
 
+@bot.command()
+async def join(message):
+    channel = message.author.voice.channel
+    await channel.connect()
+@bot.command()
+async def leave(ctx):
+    await ctx.voice_client.disconnect()
 
 if __name__ == "__main__":
-    client.run(bot_token) # On run le bot avec son token secret!
+    bot.run(bot_token) # On run le bot avec son token secret!
     pass
