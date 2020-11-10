@@ -1,5 +1,10 @@
 PAS TESTES:
 gunicorn -k gevent -w 1 module:app
 
+web: gunicorn -k eventlet app:app
+
 TESTES:
 gunicorn -k geventwebsocket.gunicorn.workers.GeventWebSocketWorker -w 1 app:app
+
+web: gunicorn app:app --log-file=-
+web: gunicorn --worker-class eventlet -w 1 app:app

@@ -48,7 +48,7 @@ def buzz(message):
     print('BUZZ!!')
     emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True)
     config.read('config.ini') #ON UPDATE LA CONFIG
-    #playerThatBuzzed.buzz(config)
+    playerThatBuzzed.buzz(config)
 
 
 

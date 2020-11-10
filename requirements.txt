@@ -34,3 +34,4 @@ gunicorn
 Flask-SocketIO
 eventlet
 gevent-websocket
+requests

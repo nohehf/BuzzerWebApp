@@ -4,7 +4,7 @@ class Player {
     }
 }
 
-const namespace = '/test'; //adresse du WebSocket
+const namespace = '/'; //adresse du WebSocket
 var socket = io(namespace);
 
 var currentPlayer = new Player(""); //PAS BO de faire comme ça mais bon je suis fatigué
