@@ -107,7 +107,6 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                         react = await client.wait_for("reaction_add", timeout=30) # On attend la reaction d'un membre
                         react = str(react)
                         emoji = react[18]
-                        print(emoji)
                         if emoji != '👍': # Si c'est 👍, on continue
                             raise # Sinon on raise :)
                         config['DISCORD']['voicechannel'] = str(VoiceChan) #ON CHANGE LE CHANNEL

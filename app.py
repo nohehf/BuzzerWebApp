@@ -46,6 +46,7 @@ def buzz(message):
     playerThatBuzzed = playerList[message['name']] #On récupere l'objet player associé au nom du joueur qui a buzzé
     print('BUZZ!!')
     emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True)
+    config.read('config.ini')
     playerThatBuzzed.buzz(config)
 
 
