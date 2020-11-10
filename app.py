@@ -52,7 +52,7 @@ def buzz(message):
 
 
 if __name__ == "__main__":
-    socket_.run(app,debug=True,host=host,port=port)
+    socket_.run(app,debug=True)
     pass
 
 #======================      OLD       =================================
