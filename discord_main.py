@@ -1,14 +1,21 @@
 import discord
 import asyncio
 import time
+
+#CONFIG FILE:
+from configparser import ConfigParser
+config = ConfigParser()
+config.read("config.ini")
+
+
 # Initialisation du bot
 intents = discord.Intents.default()
 intents.members = True
 client = discord.Client(intents=intents)
 
 # Paramétrage du bot
-bot_token = 'Nzc0NDE1MjE3NjQ3OTQzNjgy.X6XcXw.UIe9ZesQhp4RGU1yB_xUtTI2oi0' # Le token du bot mis à la zeub (pas très secure :) )
-chara = '_' # Le charactère pour les commandes
+bot_token = config["DISCORD"]['token'] # Le token du bot mis à la zeub (pas très secure :) )
+chara = config["DISCORD"]['chara'] # Le charactère pour les commandes
 
 @client.event # La décoration indique au bot qu'un évènement vient après : c'est comme cela que fonctionne le bot.
 async def on_ready(): # La coroutine se lance lorsque le bot est bien opérationnel.
@@ -18,32 +25,26 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
     if message.author == client.user: # On ne veut pas que le bot réponde à ses propres messages
         return
     try: # On regarde si le message a été envoyé par le webhook
-        txt = open('url.txt', 'r')
-        txt_id = txt.readline()
-        txt.close()
+        txt_id = config['WEBHOOK']['webhook_id']
         if int(message.webhook_id) == int(txt_id): # Si le message vient du bot on peut faire les actions necessaires et on récupère l'id
             start = time.time() # On lance le chrono !
             mess = message.content
             name = mess[:-9]
             guild = message.guild
-            setup_txt = open('setup.txt','r')
-            VoiceChannel_name = setup_txt.readline() # On lit le salon vocal du setup
-            setup_txt.close()
-            try:
-                member_buzzer = discord.utils.get(guild.members, id=int(name)) # On essaie d'avoir le membre correspondant à l'id fournit
-            except:
-                member_buzzer = None
+            VoiceChannel_name = config['DISCORD']['voicechannel'] # On lit le salon vocal du setup
+            member_buzzer = discord.utils.get(guild.members,display_name=name)  # On essaie d'avoir le membre correspondant à au surnom (ou nom) fourni
+            if member_buzzer == None:
+                member_buzzer = discord.utils.get(guild.members,name=name)  # On essaie d'avoir le membre correspondant au nom fourni
+                if member_buzzer == None:
+                    member_buzzer = discord.utils.get(guild.members,id=name)  # On essaie d'avoir le membre correspondant à l'id fourni
             VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
-            whitelist_file = open('whitelist.txt','r')
-            whitelist = whitelist_file.readlines() # On lit la whitelist...
-            whitelist_file.close()
+            whitelist = config["DISCORD"]['whitelist'].split(',')
             try:
-                whitelist.append(member_buzzer.id) #... à laquelle on ajoute temporairement le membre qui a buzzé.
+                whitelist.append(str(member_buzzer)) #... à laquelle on ajoute temporairement le membre qui a buzzé.
             except:
                 pass
-            whitelist = map(int, whitelist) # On map les id en int
             for member in VoiceChan.members: # Pour chaque membre du salon vocal, on regarde si il est dans la whitelist
-                if member.id in whitelist:
+                if str(member) in whitelist:
                     await member.edit(mute=False) # Oui, on le démute
                 else:
                     await member.edit(mute=True) # Non, on le mute
@@ -52,7 +53,6 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
             check = 'Voila ! Fait en ' + str(round(délai,2)) + ' secondes!'
             await message.channel.send(check)
     except: # Sinon on passe aux conditions suivantes
-        txt.close()
         pass
     if message.content.startswith(f'{chara}help') or client.user.mentioned_in(message): # Pour afficher la page d'aide sous forme d'embed
         embed = discord.Embed(title="BuzzerWebApp Help Sheet", description="List of all the availables commands :")
@@ -67,9 +67,7 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
         channel = message.channel
         k=0
         webhook_list = await channel.webhooks() # On prend la liste des webhook du channel pour vérifier si il n'est pas déja créé
-        txt = open('url.txt', 'r')
-        txt_id = txt.readline()
-        txt.close()
+        txt_id = config['WEBHOOK']['webhook_id']
         for webhook in webhook_list:
             if webhook.id == int(txt_id):
                 k=1
@@ -79,12 +77,11 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
             webhook_created = await channel.create_webhook(name='Etoiles',avatar=img) #création
             webhook_img.close()
             id = str(webhook_created.id) #webhook_id
+            config["WEBHOOK"]["webhook_id"] = id
             token = webhook_created.token #webhook_token
-            webhook_url = 'discordapp.com/api/webhooks/' + str(id) + '/' + str(token) #webhook_url
-            txt = open('url.txt','w')
-            for L in [id, token, webhook_url]:
-                txt.write(L+'\n')
-            txt.close()
+            config["WEBHOOK"]["webhook_token"] = token
+            with open('config.ini', 'w') as conf:
+                config.write(conf)
             check = 'WebHook créé !'
             await channel.send(check)
         else:
@@ -110,12 +107,12 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                         react = await client.wait_for("reaction_add", timeout=30) # On attend la reaction d'un membre
                         react = str(react)
                         emoji = react[18]
-                        print(emoji)
                         if emoji != '👍': # Si c'est 👍, on continue
                             raise # Sinon on raise :)
-                        setup_file = open('setup.txt','w')
-                        setup_file.write(str(VoiceChan)) # On écrit dans le fichier setup.exe le nom du VoiceChannel pour le récupérer en temps voulu
-                        setup_file.close()
+                        config['DISCORD']['voicechannel'] = str(VoiceChan) #ON CHANGE LE CHANNEL
+                        with open('config.ini', 'w') as conf:
+                            config.write(conf)
+
                         await message.channel.send("C'est fait!")
                     except:
                         await message.channel.send("OK, on annule tout!")

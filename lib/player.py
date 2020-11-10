@@ -9,25 +9,10 @@ class Player():
         self.name = name
         self.sid = sid
 
-    def buzz(self):
+    def buzz(self,config):
         print(f'Player "{self.name}" Buzzed')
-        buzz_webhook_send(self.name)
-
-
-
-def addToPlayerLDict (player, playerDict):
-
-    pass
-
-
-
+        buzz_webhook_send(self.name,config)
 
 if __name__ == "__main__":
-    playersDict = []
-    playerJson = {
-        "name": "nohz"
-    }
-    timote = Player('timote','0')
-    timote.buzz()
-    
+    #TESTS HERE
     pass

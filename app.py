@@ -2,25 +2,17 @@
 from flask import Flask, jsonify, abort, Response, make_response, render_template, session, copy_current_request_context , request
 from flask_socketio import SocketIO, emit, disconnect
 from threading import Lock
-from lib.flask_defs import get_username
 from lib.player import Player
-import lib.player
+
+#IMPORT CONFIG FILE:
+from configparser import ConfigParser
+config = ConfigParser()
+config.read("config.ini")
 
 
-# current_path = os.getcwd() #On setup le bon path pour être sur d'avoir les modules de bien importés, peut n'importe l'interpréteur.
-# split = current_path.split('\\')
-# if split[-1] != 'BuzzerWebApp':
-#     split.pop()
-#     BuzzerWebApp_folder_path = '\\'.join(split)
-#     sys.path.append(BuzzerWebApp_folder_path)
-
-
-try:
-    urlFile = open('yourLocalUrl.txt','r')
-    myUrl = urlFile.read()
-    urlFile.close()
-except:
-    myUrl = '176.167.250.142'
+#SERVER CONFIG
+host = config["SERVER"]['host']
+port = config["SERVER"]['port']
 
 #On setup flask et SocketIO
 async_mode = None
@@ -54,12 +46,13 @@ def buzz(message):
     playerThatBuzzed = playerList[message['name']] #On récupere l'objet player associé au nom du joueur qui a buzzé
     print('BUZZ!!')
     emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True)
-    playerThatBuzzed.buzz()
+    config.read('config.ini')
+    playerThatBuzzed.buzz(config)
 
 
 
 if __name__ == "__main__":
-    socket_.run(app,debug=True,host=myUrl,port=80)
+    socket_.run(app,debug=True,host=host,port=port)
     pass
 
 #======================      OLD       =================================
