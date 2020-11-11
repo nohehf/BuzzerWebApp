@@ -12,7 +12,7 @@ config.read("config.ini")
 
 #SERVER CONFIG
 host = config["SERVER"]['host']
-port = config["SERVER"]['port']
+port = int(config["SERVER"]['port'])
 
 #On setup flask et SocketIO
 async_mode = None
@@ -25,9 +25,13 @@ thread_lock = Lock()
 
 playerList = {} #Associe discord name et Sid
 
-@app.route('/')  #Desormais l'index est host sur le meme serveur
+@app.route('/')  #Login Peut etre accueil plus tard
 def index():
     return render_template('index.html',sync_mode=socket_.async_mode)
+
+@app.route('/buzz')  #Desormais l'index est host sur le meme serveur
+def buzzPage():
+    return render_template('buzz.html',sync_mode=socket_.async_mode)
 
 @socket_.on('login', namespace='/test') #CHANGE NAMESPACE
 def connect_message(message):
@@ -39,6 +43,15 @@ def connect_message(message):
     emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
     print(playerList)
 
+@socket_.on('login_test',namespace='/test')
+def newLogin(message):
+    playerName = message['name']
+    playerSid = request.sid
+    player = Player(playerName,playerSid) #On crée un nouveau joueur /!\ il va falloir vérifier l'unicité du nom et si il exite déja juste changer le sid
+    playerList[message['name']] = player #On l'ajoute à la liste de joueurs.
+    emit('redirect', '/buzz')
+    emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
+    print(playerList)
 
 
 @socket_.on('buzz',namespace='/test') 

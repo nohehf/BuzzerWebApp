@@ -1,0 +1,48 @@
+#Div_acceuil {
+  text-align: center;
+  padding: 40px;
+  background-color: rgba(255,255,255,0);
+  background-size: cover;
+}
+
+@media (max-width: 400px) {
+  #Div_acceuil {
+    padding: 0px;
+  }
+}
+
+#Div_acceuil .jumbotron {
+  border-radius: 20px;
+  padding: 40px;
+  background-color: rgba(255,255,255,0.74);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (max-width: 400px) {
+  #Div_acceuil .jumbotron {
+    padding: 0px;
+    border-radius: 0;
+    background-color: rgb(254,173,0);
+  }
+}
+
+#logo {
+  max-height: 42px;
+  margin-right: 6px;
+  margin-top: -4px;
+  display: inline-block;
+}
+
+@media (max-width: 400px) {
+  #discord_username {
+    max-width: 145px;
+  }
+}
+
+#Buzzer_Icon {
+  min-width: 250px;
+  min-height: 250px;
+  font-size: 100px;
+}
+
