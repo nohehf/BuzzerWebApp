@@ -1,6 +1,7 @@
 # Welcome to the BuzzerWebApp!
 
 **BuzzerWebApp** (temporary name) is a web application which serves as a buzzer (for exemple a quizz game). Users (players) just have to log into the website to play, and when one player buzzes the others are notified, can't buzz for a certain time and this **triggers a certain action** (that will be customizable later).
+### You can test it here by logging-in several names: https://buzzerwebapp.herokuapp.com/ (without the discord features)
 
 # On buzz actions:
 
