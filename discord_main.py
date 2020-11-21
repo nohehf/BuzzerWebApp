@@ -38,16 +38,12 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                 if member_buzzer == None:
                     member_buzzer = discord.utils.get(guild.members,id=name)  # On essaie d'avoir le membre correspondant à l'id fourni
             VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
-            whitelist = config["DISCORD"]['whitelist'].split(',')
-            try:
-                whitelist.append(str(member_buzzer)) #... à laquelle on ajoute temporairement le membre qui a buzzé.
-            except:
-                pass
             for member in VoiceChan.members: # Pour chaque membre du salon vocal, on regarde si il est dans la whitelist
-                if str(member) in whitelist:
-                    await member.edit(mute=False) # Oui, on le démute
-                else:
-                    await member.edit(mute=True) # Non, on le mute
+                try:
+                    if str(member) ==str(member_buzzer):
+                        await member.edit(mute=False) # Oui, on le démute
+                except:
+                    pass
             end = time.time() # On stop le chrono !
             délai = end - start
             check = 'Voila ! Fait en ' + str(round(délai,2)) + ' secondes!'
@@ -63,6 +59,16 @@ async def on_message(message): # La coroutine se lance lorsqu'un nouveau message
                         value="Clear the WebHook created by the bot in this TextChannel. Use only if the WebHook is not responding.",
                         inline=True)
         await message.channel.send(embed=embed)
+    if message.content.startswith(f'{chara}mute'):
+        whitelist = config["DISCORD"]['whitelist'].split(',')
+        guild = message.guild
+        VoiceChannel_name = config['DISCORD']['voicechannel']  # On lit le salon vocal du setup
+        VoiceChan = discord.utils.get(guild.voice_channels, name=str(VoiceChannel_name))
+        for member in VoiceChan.members:
+            if str(member) in whitelist:
+                await member.edit(mute=False)  # Oui, on le démute
+            else:
+                await member.edit(mute=True)  # Non, on le mute
     if message.content.startswith(f'{chara}setup'): # Le setup permet de créer le webhook dans le bon channel (chaque webhook est lié à un channel seulement)
         channel = message.channel
         k=0
