@@ -1,4 +1,3 @@
-#Run the server
 from flask import Flask, jsonify, abort, Response, make_response, render_template, session, copy_current_request_context , request
 from flask_socketio import SocketIO, emit, disconnect
 from threading import Lock
@@ -14,28 +13,28 @@ config.read("config.ini")
 host = config["SERVER"]['host']
 port = config["SERVER"]['port']
 
-#On setup flask et SocketIO
+# Flask and Socket-IO setup
 async_mode = None
 app = Flask(__name__)
-# app.config['SECRET_KEY'] = 'secret!'
 socket_ = SocketIO(app, async_mode=async_mode)
-#A tester différemment:
+
+#This might work with different settings
 thread = None
 thread_lock = Lock()
 
-playerList = {} #Associe discord name et Sid
+playerList = {} #We create a dictionnary to store Players objects, with playerName as dict key
 
-@app.route('/')  #Desormais l'index est host sur le meme serveur
+@app.route('/') #Simply render the main page on root url
 def index():
     return render_template('index.html',sync_mode=socket_.async_mode)
 
-@socket_.on('login', namespace='/test') #CHANGE NAMESPACE
+@socket_.on('login', namespace='/test') #Name space has to be changed
 def connect_message(message):
     print(message)
     playerName = message['name']
     playerSid = request.sid
-    player = Player(playerName,playerSid) #On crée un nouveau joueur /!\ il va falloir vérifier l'unicité du nom et si il exite déja juste changer le sid
-    playerList[message['name']] = player #On l'ajoute à la liste de joueurs.
+    player = Player(playerName,playerSid) #Creates a new Player instance
+    playerList[message['name']] = player #Save it into the dictionnary
     emit('loginResponse', {'data': "Logged as : " + playerName + "<br> Your Sid=" + playerSid})
     print(playerList)
 
@@ -43,11 +42,11 @@ def connect_message(message):
 
 @socket_.on('buzz',namespace='/test') 
 def buzz(message):
-    playerThatBuzzed = playerList[message['name']] #On récupere l'objet player associé au nom du joueur qui a buzzé
-    print('BUZZ!!')
-    emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True)
-    config.read('config.ini')
-    playerThatBuzzed.buzz(config)
+    playerThatBuzzed = playerList[message['name']] #Retrives the Player objects associated with the name of the player that buzzed
+    print('Player : ' + playerThatBuzzed.name + ' buzzed !')
+    emit('buzzResponse', {'data': playerThatBuzzed.name}, broadcast=True) #Send back the name of the player that buzzed to all players
+    config.read('config.ini') #We update the config before next step (because confing can be modified while server running) 
+    playerThatBuzzed.buzz(config) #We trigger the buzz method of Player and pass the config to it (for the discord webhook to access it)
 
 
 
@@ -55,28 +54,7 @@ if __name__ == "__main__":
     socket_.run(app,debug=True,host=host,port=port)
     pass
 
-#======================      OLD       =================================
-# @app.route('/login', methods=['POST'])
-# def login():
-#     playerString = request.data.decode("utf-8") #On récupere la data de la requete sous forme de string
-#     playerJson = json.loads(playerString) #on la transforme en json
-#     player = Player(playerJson['name']) #on crée un nouveau joueur
-#     print(player.name + ' LOGGED IN') 
-#     response = make_response("POST SUCCES", 200)
-#     response.headers["Access-Control-Allow-Origin"] = "*" 
-#     playerList[player.name] = player #On ajoute le joueur à la playerList, pour le moment on identifie par name, il faudra plus tard associer un id
-#     return response
 
-# @app.route('/buzzer', methods=['POST'])
-# def user():
-#     dataString = request.data.decode("utf-8")
-#     dataJson = json.loads(dataString)
-#     name = dataJson['name'] #On récupere le nom du joueur qui à buzzé
-#     player = playerList[name] #on cherche le player correspondant dans playerList
-#     player.buzz() #on appelle la méthode buzz pour le joueur qui à buzzé
-#     response = make_response("POST SUCCES", 200)
-#     response.headers["Access-Control-Allow-Origin"] = "*"
-#     return response
 
 
 

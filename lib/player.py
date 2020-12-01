@@ -1,4 +1,4 @@
-import sys #on setup les différents paths (c un peu le bordel)
+import sys
 try:
     from lib.WebHook import buzz_webhook_send
 except:
@@ -14,5 +14,4 @@ class Player():
         buzz_webhook_send(self.name,config)
 
 if __name__ == "__main__":
-    #TESTS HERE
     pass
