@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, abort, Response, make_response, render_template, session, copy_current_request_context , request
 from flask_socketio import SocketIO, emit, disconnect
-from threading import Lock
 from lib.player import Player
 
 #IMPORT CONFIG FILE:
@@ -14,13 +13,8 @@ host = config["SERVER"]['host']
 port = config["SERVER"]['port']
 
 # Flask and Socket-IO setup
-async_mode = None
 app = Flask(__name__)
-socket_ = SocketIO(app, async_mode=async_mode)
-
-#This might work with different settings
-thread = None
-thread_lock = Lock()
+socket_ = SocketIO(app)
 
 playerList = {} #We create a dictionnary to store Players objects, with playerName as dict key
 
